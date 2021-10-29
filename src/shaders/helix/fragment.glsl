@@ -5,7 +5,6 @@ uniform sampler2D uTexture;
 
 varying float vColorRandom;
 
-
 void main() {
   float alpha = texture2D(uTexture, gl_PointCoord).r;
   vec3 color = uColor1;
