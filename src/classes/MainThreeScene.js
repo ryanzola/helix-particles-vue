@@ -10,6 +10,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import RAF from '../utils/RAF'
 import MyGUI from '../utils/MyGUI'
+import CamParallax from './CamParallax'
 
 import Helix from '../classes/Helix'
 import Particles from '../classes/Particles'
@@ -76,6 +77,8 @@ class MainThreeScene {
 	setCamera() {
 		this.camera = new THREE.PerspectiveCamera(70, this.config.width / this.config.height, 0.1, 1000)
 		this.camera.position.set(0, 0, 1.5)
+
+		CamParallax.init(this.camera)
 	}
 
 	setRenderer() {
@@ -140,7 +143,7 @@ class MainThreeScene {
 
 	setControls() {
 		this.controls = new OrbitControls(this.camera, this.renderer.domElement)
-		this.controls.enabled = true
+		this.controls.enabled = false
 		this.controls.maxDistance = 1500
 		this.controls.minDistance = 0
 	}
@@ -160,6 +163,7 @@ class MainThreeScene {
 				this.renderer.render(this.scene, this.camera);
 		}
 
+		CamParallax.update()
 		Helix.update()
 		Particles.update()
 	}
