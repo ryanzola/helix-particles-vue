@@ -1,7 +1,7 @@
 module.exports = {
 
     devServer: {
-        https: true,
+        https: false,
     },
 
     chainWebpack: config => {

@@ -1,5 +1,3 @@
-import { Vector2 } from 'three'
-
 import vertex from '../shaders/aberration/vertex.glsl'
 import fragment from '../shaders/aberration/fragment.glsl'
 

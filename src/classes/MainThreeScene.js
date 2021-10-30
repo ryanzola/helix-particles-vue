@@ -11,6 +11,7 @@ import RAF from '../utils/RAF'
 import MyGUI from '../utils/MyGUI'
 
 import Helix from '../classes/Helix'
+import Particles from '../classes/Particles'
 
 class MainThreeScene {
 	constructor() {
@@ -23,6 +24,11 @@ class MainThreeScene {
 
 	init(container) {
 		this.targetElement = container;
+
+		if(!this.targetElement) {
+			console.warn('Missing \'targetElement\' property')
+			return
+		}
 		
 		this.setConfig()
 		this.setDebug()
@@ -32,6 +38,10 @@ class MainThreeScene {
 		this.setPostProcess()
 		this.setControls()
 		this.setHelix()
+		this.setParticles()
+
+		window.addEventListener("resize", this.resizeCanvas)
+		RAF.subscribe('threeSceneUpdate', this.update)
 	}
 
 	setConfig() {
@@ -59,13 +69,12 @@ class MainThreeScene {
 	}
 
 	setScene() {
-			this.scene = new THREE.Scene()
+		this.scene = new THREE.Scene()
 	}
 
 	setCamera() {
-			this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000)
-			this.camera.position.set(0, 0, 1.5)
-
+		this.camera = new THREE.PerspectiveCamera(70, this.config.width / this.config.height, 0.1, 1000)
+		this.camera.position.set(0, 0, 2.5)
 	}
 
 	setRenderer() {
@@ -74,9 +83,6 @@ class MainThreeScene {
 		this.renderer.debug.checkShaderErrors = true
 		this.renderer.setPixelRatio(Math.min(Math.max(window.devicePixelRatio, 1), 2))
 		this.targetElement.appendChild(this.renderer.domElement)
-
-		window.addEventListener("resize", this.resizeCanvas)
-		RAF.subscribe('threeSceneUpdate', this.update)
 	}
 
 	setPostProcess() {
@@ -128,6 +134,10 @@ class MainThreeScene {
 		Helix.init(this.scene)
 	}
 
+	setParticles() {
+		Particles.init(this.scene)
+	}
+
 	update() {
 		if(this.config.usePostProcessing) {
 				this.postProcess.composer.render()
@@ -136,6 +146,7 @@ class MainThreeScene {
 		}
 
 		Helix.update()
+		Particles.update()
 	}
 
 	resizeCanvas() {
@@ -145,8 +156,8 @@ class MainThreeScene {
 		this.config.pixelRatio = Math.min(Math.max(window.devicePixelRatio, 1), 2)
 
 		this.renderer.setSize(this.config.width, this.config.height)
-		this.composer.setSize(this.config.width, this.config.height)
-		this.composer.setPixelRatio(this.config.pixelRatio)
+		this.postProcess.composer.setSize(this.config.width, this.config.height)
+		this.postProcess.composer.setPixelRatio(this.config.pixelRatio)
 		this.camera.aspect = this.config.width / this.config.height
 		this.camera.updateProjectionMatrix()
 	}
