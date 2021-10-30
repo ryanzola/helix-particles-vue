@@ -87,7 +87,7 @@ class Helix {
       vertexShader: vertex,
       fragmentShader: fragment,
       transparent: true,
-      // blending: THREE.AdditiveBlending,
+      blending: THREE.AdditiveBlending,
       depthTest: false,
       depthWrite: false
     })

@@ -3,6 +3,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
+import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js'
 import { CustomPass } from './CustomPass'
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -74,7 +75,7 @@ class MainThreeScene {
 
 	setCamera() {
 		this.camera = new THREE.PerspectiveCamera(70, this.config.width / this.config.height, 0.1, 1000)
-		this.camera.position.set(0, 0, 2)
+		this.camera.position.set(0, 0, 1.5)
 	}
 
 	setRenderer() {
@@ -108,6 +109,7 @@ class MainThreeScene {
 		this.postProcess.composer.setSize(this.config.width, this.config.height)
 		this.postProcess.composer.setPixelRatio(this.config.pixelRatio)
 
+		// bloom
 		this.postProcess.bloomPass = new UnrealBloomPass(
 			new THREE.Vector2(this.config.width, this.config.height), 
 			1.5, 
@@ -116,17 +118,24 @@ class MainThreeScene {
 		)
 		this.postProcess.bloomPass.enabled = true
 
+		// aberration
 		this.postProcess.aberrationPass = new ShaderPass(CustomPass)
+
+		// film pass
+		this.postProcess.filmPass = new FilmPass(0.5, 0, 0, false)
 
 		this.postProcess.composer.addPass(this.postProcess.renderPass)
 		this.postProcess.composer.addPass(this.postProcess.bloomPass)
 		this.postProcess.composer.addPass(this.postProcess.aberrationPass)
-
-		const bloomFolder = MyGUI.addFolder('bloom pass')
-		bloomFolder.open()
-		bloomFolder.add(this.postProcess.bloomPass, 'strength', 0.0, 10.0, 0.001)
-		bloomFolder.add(this.postProcess.bloomPass, 'radius', 0.0, 10.0, 0.001)
-		bloomFolder.add(this.postProcess.bloomPass, 'threshold', -1.0, 1.0, 0.001)
+		this.postProcess.composer.addPass(this.postProcess.filmPass)
+		
+		if(this.config.debug) {
+			const bloomFolder = MyGUI.addFolder('bloom pass')
+			bloomFolder.open()
+			bloomFolder.add(this.postProcess.bloomPass, 'strength', 0.0, 10.0, 0.001)
+			bloomFolder.add(this.postProcess.bloomPass, 'radius', 0.0, 10.0, 0.001)
+			bloomFolder.add(this.postProcess.bloomPass, 'threshold', -1.0, 1.0, 0.001)
+		}
 	}
 
 	setControls() {

@@ -8,7 +8,7 @@ class Particles {
   constructor() {
       this.bind()
 
-      this.count = 1008
+      this.count = 4032
       this.rows = 50
       this.time = 0
       this.scale = 4
