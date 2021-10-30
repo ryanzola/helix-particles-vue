@@ -100,7 +100,7 @@ class Particles {
   setMesh() {
     this.mesh = new THREE.Points(this.geometry, this.material)
     this.mesh.rotation.order = 'ZYX';
-    this.mesh.rotateOnWorldAxis(new THREE.Vector3(0, 0, -1), THREE.Math.degToRad(45))
+    this.mesh.rotateOnWorldAxis(new THREE.Vector3(0, 0, -1), THREE.Math.degToRad(35))
 
     this.scene.add(this.mesh)
   }

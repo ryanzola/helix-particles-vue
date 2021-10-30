@@ -82,13 +82,12 @@ class Helix {
         uColor1: { value: this.colors.color1.instance },
         uColor2: { value: this.colors.color2.instance },
         uColor3: { value: this.colors.color3.instance },
-        uTime: { value: 0 },
         uTexture: { value: this.textureLoader.load('/assets/particleMask.png') },
       },
       vertexShader: vertex,
       fragmentShader: fragment,
       transparent: true,
-      blending: THREE.AdditiveBlending,
+      // blending: THREE.AdditiveBlending,
       depthTest: false,
       depthWrite: false
     })
@@ -97,14 +96,13 @@ class Helix {
   setPoints() {
     this.mesh = new THREE.Points(this.geometry, this.material)
     this.mesh.rotation.order = 'ZYX';
-    this.mesh.rotateOnWorldAxis(new THREE.Vector3(0, 0, -1), THREE.Math.degToRad(45))
+    this.mesh.rotateOnWorldAxis(new THREE.Vector3(0, 0, -1), THREE.Math.degToRad(35))
     this.scene.add(this.mesh)
   }
 
   update() {
     this.time += 0.002
     this.mesh.rotation.y = this.time
-    this.material.uniforms.uTime.value = this.time
   }
 
   bind() {

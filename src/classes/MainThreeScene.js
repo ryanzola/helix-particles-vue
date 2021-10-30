@@ -74,7 +74,7 @@ class MainThreeScene {
 
 	setCamera() {
 		this.camera = new THREE.PerspectiveCamera(70, this.config.width / this.config.height, 0.1, 1000)
-		this.camera.position.set(0, 0, 2.5)
+		this.camera.position.set(0, 0, 2)
 	}
 
 	setRenderer() {
@@ -110,8 +110,8 @@ class MainThreeScene {
 
 		this.postProcess.bloomPass = new UnrealBloomPass(
 			new THREE.Vector2(this.config.width, this.config.height), 
-			0.3, 
-			0.0, 
+			1.5, 
+			0.8, 
 			0.0
 		)
 		this.postProcess.bloomPass.enabled = true
@@ -121,6 +121,12 @@ class MainThreeScene {
 		this.postProcess.composer.addPass(this.postProcess.renderPass)
 		this.postProcess.composer.addPass(this.postProcess.bloomPass)
 		this.postProcess.composer.addPass(this.postProcess.aberrationPass)
+
+		const bloomFolder = MyGUI.addFolder('bloom pass')
+		bloomFolder.open()
+		bloomFolder.add(this.postProcess.bloomPass, 'strength', 0.0, 10.0, 0.001)
+		bloomFolder.add(this.postProcess.bloomPass, 'radius', 0.0, 10.0, 0.001)
+		bloomFolder.add(this.postProcess.bloomPass, 'threshold', -1.0, 1.0, 0.001)
 	}
 
 	setControls() {
